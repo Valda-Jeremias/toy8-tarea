@@ -1,6 +1,6 @@
 # Arquitectura TOY-8
 
-Nombre y apellido:
+Nombre y apellido: Jeremias Valda
 
 ## Instrucciones
 
@@ -34,8 +34,7 @@ Tienen un emulador de la computadora y el circuito para el Logisim en el [blog](
 0xE:  00000000    #  00  #  prod = 0  (data)
 ```
 
-Cuando el programa se detiene 0xE vale 18 o 0x12.
-Este programa multiplica los números que se encuentran en 0xB y 0xC y pone el producto en 0xE.
+El valor de 0xE sera 12. El programa multiplica 2 numeros. En este caso 6*3.
 
 2. Consideren el siguiente _hexdump_ de la memoria de TOY-8. O sea un volcado de la memoria en hexadecimal. ¿Cuántos programas distintos pueden encontrar? Indicar cuáles bytes interpretan como instrucciones y cuáles como datos.
 
@@ -46,28 +45,7 @@ Este programa multiplica los números que se encuentran en 0xB y 0xC y pone el p
 0xc   00 FF 01 00
 ```
 
-Hay dos:
-
-```
-A5  # lw    5
-26  # add   6
-C7  # sw    7
-00  # halt
-```
-
-Son las instrucciones, las posiciones 0x5, 0x6 y 0x7 son datos.
-
-Y también tenemos,
-
-```
-A7  # lw    7
-6D  # xor   D
-2E  # add   E
-C7  # sw    7  
-00  # halt
-```
-
-Con 0x7, 0xD y 0xE como datos.
+Hay 2 programas. El primero 4 instrucciones (A5, 26, C7 y 00) y 3 datos (08, 05 y 00), el segundo tiene 5 instrucciones (A7, 6D, 2E, C7 y 00) y 3 datos (FF, 01 y 00).
 
 3. Para el primer programa del ejercicio anterior. ¿Qué líneas de control se activan para cada instrucción? ¿Cuál es el valor del bus de datos y de instrucciones en cada instrucción? Completen la siguiente tabla, agreguen las filas que sean necesarias.
 
@@ -85,17 +63,17 @@ Con 0x7, 0xD y 0xE como datos.
 4. El siguiente programa suma los números que encuentra en la entrada hasta que aparece un cero, y luego envía el resultado a la salida. Traducirlo a ensamblador y a C siguiendo el ejemplo de las primeras dos líneas.
 
 ```
-0x1:  A0   #  lw   0  #
-0x2:  CE   #  sw   E  #  int sum = 0;
-0x3:  AF   #  lw   F  #  scanf("%d", &num);
-0x4:  E9   #  bze  9  #  while (num != 0) {
-0x5:  2E   #  add  E  #    sum += num;
-0x6:  CE   #  sw   E  #    
-0x7:  A0   #  lw   0  #    scanf("%d", &num);
-0x8:  E3   #  bze  3  #  }
-0x9:  AE   #  lw   E  #  
-0xA:  CF   #  sw   F  #  printf("%d", sum);
-0xB:  00   #  halt    #
+0x1:  A0   #  lw 0  #  int R = 0;
+0x2:  CE   #  sw E  #  int sum = 0;
+0x3:  AF   #  lw F  #  int R = 0;
+0x4:  E9   #  bze 9 #  if (R = 0) { int R = 0; }
+0x5:  2E   #  add E #  R = R + 0;  
+0x6:  CE   #  sw E  #  int sum = 0;
+0x7:  A0   #  lw 0  #  int R = 0;
+0x8:  E3   #  bze 3 #  if (R = 0) { int R = 0; }
+0x9:  AE   #  lw E  #  int R = 0;
+0xA:  CF   #  sw F  #  int sum = 0;
+0xB:  00   #  halt  #  break;
 ```
 
 5. Una mejora que le podríamos hacer a esta computadora es duplicar la cantidad de memoria, pasar de 16 bytes a 32 bytes. ¿Cómo lo harían manteniendo la longitud de las instrucciones en 8 bits? ¿Qué partes de la CPU habría que modificar y cómo?
